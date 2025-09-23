@@ -3,7 +3,6 @@ MINIMUM_NUMBER_OF_LETTERS = 3
 
 def main():
     password = get_password()
-
     print_asterisks(password)
 
 
