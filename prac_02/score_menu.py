@@ -17,6 +17,7 @@ def main():
     print("Farewell")
 
 def print_stars(score):
+    """Print x amount of stars based on the user input for score"""
     for i in range(score):
         print("*", end= "")
     print()
