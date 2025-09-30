@@ -1,3 +1,8 @@
+""""
+CP1404/CP5632 - Practical
+Examples of using random functions.
+"""
+
 import random
 
 print(random.randint(5, 20))  # line 1
