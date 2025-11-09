@@ -4,7 +4,7 @@ DEFAULT_FILENAME = "projects.txt"
 
 def main():
     print("Welcome to Pythonic Project Management")
-    projects = load_projects_from_file(DEFAULT_FILENAME)
+    projects = load_projects(DEFAULT_FILENAME)
     print(f"Loaded {len(projects)} projects from {DEFAULT_FILENAME}")
 
     menu_input = input("(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects by date\n(A)dd new project\n(U)pdate project\n(Q)uit").upper()
@@ -24,8 +24,17 @@ def main():
         else:
             print("Invalid menu choice")
 
+def add_projects(projects):
+    print("Let's add a new project")
+    name = input("Name: ")
+    start_date = input("Start date (dd/mm/yy): ")
+    priority = int(input("Priority: "))
+    cost = float(input("Cost Estimate: $"))
+    percent_complete = int(input("Percent complete: "))
+    new_project = Project(name, start_date, priority, cost, percent_complete)
+    projects.append(new_project)
 
-def load_projects(filename=FILENAME):
+def load_projects(filename=DEFAULT_FILENAME):
     """Read data from file formatted like: Name, Start Date, Priority, Cost Estimate, Completion Percentage."""
     projects = []
     with open(filename, "r") as input_file:
@@ -35,3 +44,17 @@ def load_projects(filename=FILENAME):
             project = Project(name, start_date, int(priority), float(cost), int(percent_complete))
             projects.append(project)
     return projects
+
+def save_projects(DEFAULT_FILENAME, projects):
+    """Save the projects list to the outfile, overwriting any existing content."""
+    with open(DEFAULT_FILENAME, 'w') as outfile:
+        for project in projects:
+            outfile.write(project)
+
+def filter_projects(projects):
+    chosen_date = input("Show projects that start after date (dd/mm/yy): ")
+    chosen_date = datetime.strptime(chosen_date, "%d/%m/%Y").date()
+    for project in projects:
+        if project.start_date > chosen_date:
+            print(project)
+
