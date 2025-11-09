@@ -1,28 +1,30 @@
 from prac_07.project import Project
+from datetime import date, datetime
 
 DEFAULT_FILENAME = "projects.txt"
 
 def main():
     print("Welcome to Pythonic Project Management")
-    projects = load_projects(DEFAULT_FILENAME)
+    project, projects = load_projects(DEFAULT_FILENAME)
     print(f"Loaded {len(projects)} projects from {DEFAULT_FILENAME}")
 
-    menu_input = input("(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects by date\n(A)dd new project\n(U)pdate project\n(Q)uit").upper()
+    menu_input = input("(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects by date\n(A)dd new project\n(U)pdate project\n(Q)uit\n").upper()
     while menu_input != "Q":
         if menu_input == "L":
-            load_projects()
+            project, projects = load_projects(projects)
         elif menu_input == "S":
-            save_projects()
+            save_projects(projects)
         elif menu_input == "D":
-            display_objects
+            display_objects(projects)
         elif menu_input == "F":
-            filter_projects()
+            filter_projects(projects)
         elif menu_input == "A":
-            add_projects()
+            add_projects(projects)
         elif menu_input == "U":
-            update_projects()
+            update_projects(projects)
         else:
             print("Invalid menu choice")
+            menu_input = input("(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects by date\n(A)dd new project\n(U)pdate project\n(Q)uit\n").upper()
 
 def add_projects(projects):
     print("Let's add a new project")
@@ -30,20 +32,22 @@ def add_projects(projects):
     start_date = input("Start date (dd/mm/yy): ")
     priority = int(input("Priority: "))
     cost = float(input("Cost Estimate: $"))
-    percent_complete = int(input("Percent complete: "))
-    new_project = Project(name, start_date, priority, cost, percent_complete)
+    completion_percentage = int(input("Percent complete: "))
+    new_project = Project(name, start_date, priority, cost, completion_percentage)
     projects.append(new_project)
 
-def load_projects(filename=DEFAULT_FILENAME):
+def load_projects(project):
     """Read data from file formatted like: Name, Start Date, Priority, Cost Estimate, Completion Percentage."""
     projects = []
-    with open(filename, "r") as input_file:
-        input_file.readline() # Skip first line
-        for line in input_file:
-            name, start_date, priority, cost, percent_complete = line.strip().split(',')
-            project = Project(name, start_date, int(priority), float(cost), int(percent_complete))
+    with open(DEFAULT_FILENAME, "r") as in_file:
+        in_file.readline()
+        for line in in_file:
+            parts = line.strip().split("\t")
+            project = Project(parts[0], parts[1], int(parts[2]), float(parts[3]), int(parts[4]))
             projects.append(project)
-    return projects
+            print(project)
+    return project, projects
+
 
 def save_projects(DEFAULT_FILENAME, projects):
     """Save the projects list to the outfile, overwriting any existing content."""
@@ -58,3 +62,24 @@ def filter_projects(projects):
         if project.start_date > chosen_date:
             print(project)
 
+def update_projects(projects):
+    index = 0
+    for project in projects:
+        print(index, project)
+        index += 1
+    is_valid_input = False
+    while not is_valid_input:
+        choice = int(input("Project choice: "))
+        if choice < 1:
+            print("Number must be >=1")
+        else:
+            print(projects[choice])
+            is_valid_input = True
+        new_percentage = int(input("New Percentage: "))
+        projects[choice].is_complete = new_percentage
+    return projects
+
+
+
+
+main()

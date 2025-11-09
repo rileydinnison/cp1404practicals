@@ -1,12 +1,12 @@
-class Project:
-    """Represents a project with name, start date, priority, cost estimate, and completion percentage."""
+import datetime
 
-    def __init__(self, name: str, start_date: datetime, priority: int, cost: float, percent_complete: int):
+class Project:
+    def __init__(self, name='', start_date="", priority=0.0, cost=0.0, completion_percentage=0.0):
         self.name = name
-        self.start_date = start_date
         self.priority = priority
         self.cost = cost
-        self.percent_complete = percent_complete
+        self.completion_percentage = completion_percentage
+        self.start_date = datetime.datetime.strptime(start_date, "%d/%m/%Y").date()
 
     def __lt__(self, other):
         """Sort projects by priority (lower number = higher priority)."""
@@ -14,7 +14,7 @@ class Project:
 
     def is_complete(self) -> bool:
         """Return True if project is complete."""
-        return self.percent_complete >= 100
+        return self.completion_percentage>= 100
 
     def display_str(self) -> str:
         """Return a formatted string representation of the project."""
